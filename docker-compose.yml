@@ -1,6 +1,16 @@
 version: "3.8"
 
 services:
+  app:
+    build: .
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - app_data:/var/app
+    depends_on:
+      - rabbitmq
   rabbitmq:
     image: "rabbitmq:3.8-management-alpine"
     container_name: hermes_rabbitmq
@@ -18,5 +28,7 @@ networks:
     driver: local
 
 volumes:
+  app_data:
+    driver: local
   rabbitmq_data:
     driver: local
