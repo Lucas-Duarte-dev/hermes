@@ -1,13 +1,9 @@
-import { FastifyInstance, FastifyReply, FastifyRequest } from "fastify";
-import { v4 as uuidv4 } from "uuid";
+import { adapter } from "@domain/infra/adapters/FastifyRouteAdapter";
+import { FastifyInstance } from "fastify";
+import { makeCreateCustomerController } from "../factories/controllers/CreateCustomerControllerFactory";
 
 async function routes(fastify: FastifyInstance, options: Object) {
-  fastify.get(
-    "/",
-    async function (request: FastifyRequest, reply: FastifyReply) {
-      return reply.status(200).send({ hello: "world", susep_code: uuidv4() });
-    }
-  );
+  fastify.post("/customer", adapter(makeCreateCustomerController()));
 }
 
 export default routes;
