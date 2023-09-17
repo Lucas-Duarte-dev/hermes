@@ -5,7 +5,7 @@ cors();
 
 app.listen(
   {
-    port: Number(process.env.PORT) || 3000,
+    port: Number(process.env.PORT) ?? 3000,
   },
   (err: Error) => {
     app.log.error(err);
