@@ -1,7 +1,13 @@
-import Fastify from "fastify";
+import fastify from "fastify";
+import routes from "./routes";
+import { config } from "dotenv";
 
-const app = Fastify({
+config();
+
+const app = fastify({
   logger: true,
 });
+
+app.register(routes);
 
 export default app;

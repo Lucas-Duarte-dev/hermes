@@ -1,11 +1,11 @@
-import { config } from "dotenv";
 import app from "./app";
+import cors from "cors";
 
-config();
+cors();
 
 app.listen(
   {
-    port: 3000 || Number(process.env.PORT),
+    port: Number(process.env.PORT) || 3000,
   },
   (err: Error) => {
     app.log.error(err);
