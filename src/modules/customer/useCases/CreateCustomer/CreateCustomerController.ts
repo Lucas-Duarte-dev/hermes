@@ -1,7 +1,7 @@
 import { Controller } from "@domain/infra/Controller";
 import { HttpResponse, clientError, ok } from "@domain/infra/HttpResponse";
 import { randomUUID } from "crypto";
-import { Customer } from "modules/customer/dtos/Customer";
+import { Customer } from "@modules/customer/dtos/Customer";
 import { z } from "zod";
 
 type RequestData = {

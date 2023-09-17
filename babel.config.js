@@ -10,6 +10,7 @@ module.exports = {
         alias: {
           "@infra": "./src/infra",
           "@domain": "./src/domain",
+          "@modules": "./src/modules",
         },
       },
     ],
