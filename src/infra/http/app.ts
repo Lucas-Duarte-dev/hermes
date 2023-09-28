@@ -5,7 +5,7 @@ import { config } from "dotenv";
 config();
 
 const app = fastify({
-  logger: false,
+  logger: true,
 });
 
 app.register(routes);
