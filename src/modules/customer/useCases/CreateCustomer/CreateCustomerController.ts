@@ -1,8 +1,6 @@
 import { Controller } from "@domain/infra/Controller";
 import { HttpResponse, clientError, created } from "@domain/infra/HttpResponse";
-import { randomUUID } from "crypto";
 import { Customer } from "@modules/customer/dtos/Customer";
-import { z } from "zod";
 import { Validator } from "@domain/Validator";
 import { ICustomerRepository } from "@modules/customer/repositories/ICustomerRepository";
 
