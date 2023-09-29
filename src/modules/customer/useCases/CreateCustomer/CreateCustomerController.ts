@@ -21,9 +21,9 @@ export class CreateCustomerController implements Controller<RequestData> {
       );
     }
 
-    const {customer_commerce_id, name, email} = body;
+    const {customer_commerce_id, name, email, phone, cpf} = body;
 
-    await this.customerRepository.save({customer_commerce_id, name, email});
+    await this.customerRepository.save({customer_commerce_id, name, email, phone, cpf});
 
     return created();
   }

@@ -1,10 +1,11 @@
 import { Customer } from "@modules/customer/domain/Customer";
 import { ICustomerRepository } from "../ICustomerRepository";
 import { Customer as CustomerDTO } from "../../dtos/Customer";
+import { CustomerMapper } from "@modules/customer/mapper/CustomerMapper";
 
 export class CustomerRepositoryInMemory implements ICustomerRepository {
     private static instance: CustomerRepositoryInMemory;
-    private customers: Customer[] = [];
+    private customers: CustomerDTO[] = [];
 
     constructor() {
         this.customers = [];
@@ -18,17 +19,19 @@ export class CustomerRepositoryInMemory implements ICustomerRepository {
         return this.instance;
     }
 
-    async save(customer: CustomerDTO): Promise<void> {
+    async save(customer: Omit<CustomerDTO, "id">): Promise<void> {
         const customerEntity = Customer.create(customer);
-        console.log(customerEntity);
-        this.customers.push(customerEntity);
+
+        const persistCustomer = CustomerMapper.toPersist(customerEntity);
+
+        this.customers.push(persistCustomer);
     }
 
-    async getByCommerceId(commerce_id: number): Promise<Customer> {
-        return this.customers.find((customer) => customer.customerCommerceId === commerce_id);
+    async getByCommerceId(commerce_id: number): Promise<CustomerDTO> {
+        return this.customers.find((customer) => customer.customer_commerce_id === commerce_id);
     }
 
-    async getById(id: string): Promise<Customer> {
+    async getById(id: string): Promise<CustomerDTO> {
         return this.customers.find((customer) => customer.id === id);
     }
     

@@ -1,8 +1,10 @@
 import { Entity } from "@domain/Entity";
 import { Customer as CustomerDTO } from "../dtos/Customer"
 
-export class Customer extends Entity<CustomerDTO> {
-    private constructor(props: CustomerDTO, id?: string) {
+type CustomerProps = Omit<CustomerDTO, "id">;
+
+export class Customer extends Entity<CustomerProps> {
+    private constructor(props: CustomerProps, id?: string) {
         super(props, id);
     }
 
@@ -15,10 +17,18 @@ export class Customer extends Entity<CustomerDTO> {
     }
 
     get email(): string {
-        return this.props.email
+        return this.props.email;
     }
 
-    static create(props: CustomerDTO, id?: string): Customer {
+    get cpf(): string {
+        return this.props.cpf;
+    }
+
+    get phone(): string {
+        return this.props.phone;
+    }
+
+    static create(props: CustomerProps, id?: string): Customer {
         return new Customer(props, id);
     } 
 }
