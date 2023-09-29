@@ -1,16 +1,20 @@
 import { Controller } from "@domain/infra/Controller";
-import { HttpResponse, clientError, ok } from "@domain/infra/HttpResponse";
+import { HttpResponse, clientError, created } from "@domain/infra/HttpResponse";
 import { randomUUID } from "crypto";
 import { Customer } from "@modules/customer/dtos/Customer";
 import { z } from "zod";
 import { Validator } from "@domain/Validator";
+import { ICustomerRepository } from "@modules/customer/repositories/ICustomerRepository";
 
 type RequestData = {
   body: Customer;
 };
 
 export class CreateCustomerController implements Controller<RequestData> {
-  constructor(private readonly validatorRequestBody: Validator) {}
+  constructor(
+    private readonly validatorRequestBody: Validator,
+    private readonly customerRepository: ICustomerRepository
+  ) {}
 
   async handle({ body }: RequestData): Promise<HttpResponse> {
     if (!this.validatorRequestBody.validator(body)) {
@@ -19,11 +23,10 @@ export class CreateCustomerController implements Controller<RequestData> {
       );
     }
 
-    const customer = {
-      id: randomUUID(),
-      ...body,
-    };
+    const {customer_commerce_id, name, email} = body;
 
-    return ok(customer);
+    await this.customerRepository.save({customer_commerce_id, name, email});
+
+    return created();
   }
 }

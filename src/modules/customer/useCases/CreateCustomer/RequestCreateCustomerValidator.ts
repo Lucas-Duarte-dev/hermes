@@ -5,14 +5,9 @@ import { z } from "zod";
 export class RequestCreateCustomerValidator implements Validator<Customer> {
   validator(data: Customer): boolean {
     const customerValidateFields = z.object({
-      customer_ref: z.string().min(3),
+      customer_commerce_id: z.number(),
       name: z.string().min(3),
-      birth_date: z
-        .date({ coerce: true })
-        .min(new Date("1930/01/01"), { message: "Too old" })
-        .max(new Date(), { message: "Too young!" }),
-      email: z.string().email(),
-      phone: z.string(),
+      email: z.string().email()
     });
 
     if (!customerValidateFields.safeParse(data).success) {

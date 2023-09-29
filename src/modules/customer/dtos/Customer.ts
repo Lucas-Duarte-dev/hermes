@@ -1,4 +1,5 @@
 export type Customer = {
-  customer_ref: string;
-  itr: string;
+  customer_commerce_id: number;
+  email: string
+  name: string
 };
