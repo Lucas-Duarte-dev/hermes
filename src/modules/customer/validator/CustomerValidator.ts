@@ -1,9 +1,12 @@
-import { Customer } from "@modules/customer/dtos/Customer";
+import { CustomerProps } from "@modules/customer/dtos/ICustomer";
 import { Validator } from "@domain/Validator";
 import { z } from "zod";
+import { ValidatorResult } from "@domain/ValidatorResult";
 
-export class RequestCreateCustomerValidator implements Validator<Customer> {
-  validator(data: Customer): boolean {
+export class CustomerValidator implements Validator<CustomerProps> {
+  validator(data: CustomerProps): ValidatorResult {
+    const errors = [];
+    
     const customerValidateFields = z.object({
       customer_commerce_id: z.number(),
       name: z.string().min(3),
@@ -13,10 +16,9 @@ export class RequestCreateCustomerValidator implements Validator<Customer> {
     });
 
     if (!customerValidateFields.safeParse(data).success) {
-      console.log(JSON.stringify(customerValidateFields.parse(data)));
-      return false;
+      errors.push('Customer data is invalid.');
     }
 
-    return true;
+    return new ValidatorResult(errors);
   }
 }

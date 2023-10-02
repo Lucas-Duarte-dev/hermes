@@ -11,6 +11,10 @@ services:
       - app_data:/var/app
     depends_on:
       - rabbitmq
+      - database
+      - cache
+    networks:
+      - app_net
   rabbitmq:
     image: "rabbitmq:3.8-management-alpine"
     container_name: hermes_rabbitmq
@@ -22,13 +26,69 @@ services:
     environment:
       - RABBITMQ_DEFAULT_USER=guest
       - RABBITMQ_DEFAULT_PASS=guest
+    networks:
+      - app_net
+  database:
+    container_name: hermes_database
+    image: 'postgres:alpine'
+    ports:
+      - '5432:5432'
+    volumes:
+      - 'postgresql_data:/var/lib/postgresql'
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DATABASE=hermes
+    networks:
+      - app_net
+  cache:
+    container_name: hermes_redis
+    image: 'redis:alpine'
+    ports:
+      - '6379:6379'
+    volumes:
+      - cache:/data
+    networks:
+     - app_net
+  jaeger:
+    container_name: hermes_jeager
+    image: jaegertracing/all-in-one:1.30
+    environment:
+      - COLLECTOR_ZIPKIN_HOST_PORT=9411
+    ports:
+      - "5775:5775/udp"
+      - "6831:6831/udp"
+      - "6832:6832/udp"
+      - "5778:5778"
+      - "16686:16686"
+      - "14268:14268"
+      - "9411:9411"
+    networks:
+      - app_net
+  hotrod:
+    container_name: hermes_hotrod
+    image: jaegertracing/example-hotrod:latest
+    ports: 
+      - "8080:8080"
+    command: ["all"]
+    environment:
+      - JAEGER_AGENT_HOST=jaeger
+      - JAEGER_AGENT_PORT=6831
+    networks:
+      - app_net
+    depends_on:
+      - jaeger
 
 networks:
-  hermes_net:
-    driver: local
+  app_net:
+    driver: bridge
 
 volumes:
   app_data:
     driver: local
   rabbitmq_data:
+    driver: local
+  postgresql_data:
+    driver: local
+  cache:
     driver: local

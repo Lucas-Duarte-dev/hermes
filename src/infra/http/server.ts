@@ -1,6 +1,8 @@
+import instrument from '@aspecto/opentelemetry';
 import app from "./app";
 import cors from "cors";
 
+instrument({aspectoAuth: process.env.ASPECTO_AUTH});
 cors();
 
 app.listen(
